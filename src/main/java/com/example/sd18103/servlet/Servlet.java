@@ -10,16 +10,16 @@ import java.util.ArrayList;
 
 @WebServlet(name = "Servlet", value = "/Servlet")
 public class Servlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Da chay vao day GET");
-        User user = new User("U1", "Nguyen Van A", 15, "Ha Noi");
-        request.setAttribute("user", user);
+    ArrayList<User> list = new ArrayList<>();
 
-        ArrayList<User> list = new ArrayList<>();
+    public Servlet() {
         list.add(new User("U1", "Nguyen Van A", 15, "Ha Noi"));
         list.add(new User("U2", "Nguyen Van B", 16, "Ha Noi"));
         list.add(new User("U3", "Nguyen Van C", 17, "Ha Noi"));
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("list", list);
         request.getRequestDispatcher("trang-chu.jsp").forward(request, response);
     }
