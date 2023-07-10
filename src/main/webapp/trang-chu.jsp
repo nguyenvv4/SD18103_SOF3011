@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%-- <c:set--%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Title</title>
@@ -25,7 +27,31 @@
 <p>Thong tin user</p>
 <p>ID: ${user.id}</p>
 <p>Name: ${user.name}</p>
-<p>Age: </p>
-<p>Add: </p>
+<p>Age: ${user.age}</p>
+<p>Add: ${user.address}</p>
+<p>Danh sach nhan vien: </p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>Ten</td>
+        <td>Tuoi</td>
+        <td>Dia chi</td>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${list}" var="u">
+        <tr>
+            <td>${u.id}</td>
+            <td>${u.name}</td>
+            <td>${u.age}</td>
+            <td>${u.address}</td>
+        </tr>
+    </c:forEach>
+
+    </tbody>
+</table>
+
 </body>
 </html>
