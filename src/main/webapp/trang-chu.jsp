@@ -42,6 +42,10 @@
             <td>${u.name}</td>
             <td>${u.age}</td>
             <td>${u.address}</td>
+            <td>
+                <a href="#" class="btn btn-primary">Xoa</a>
+                <a href="/detail?id=${u.id}" class="btn btn-primary">Detail</a>
+            </td>
         </tr>
     </c:forEach>
 

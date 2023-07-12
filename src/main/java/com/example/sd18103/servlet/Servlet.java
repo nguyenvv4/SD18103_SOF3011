@@ -4,11 +4,17 @@ import com.example.sd18103.entity.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-@WebServlet(name = "Servlet", value = "/Servlet")
+@WebServlet(name = "Servlet", value = {
+        "/home", // GET
+        "/detail", //GET
+        "/update", // POST
+})
 public class Servlet extends HttpServlet {
     ArrayList<User> list = new ArrayList<>();
 
@@ -20,12 +26,48 @@ public class Servlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("trang-chu.jsp").forward(request, response);
+        String uri = request.getRequestURI();
+        if (uri.contains("/home")) {
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("trang-chu.jsp").forward(request, response);
+        } else if (uri.contains("/detail")) {
+            String id = request.getParameter("id");
+            User userDetail = new User();
+            for (User user : list) {
+                if (user.getId().equals(id)) {
+                    userDetail = user;
+                }
+            }
+            request.setAttribute("userDetail", userDetail);
+            request.getRequestDispatcher("detail.jsp").forward(request, response);
+        }
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Da chay vao day POST");
+        // cách 1.
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        Integer age = Integer.parseInt(request.getParameter("age"));
+        String address = request.getParameter("address");
+        // cách 2 dùng bean
+        User userTmp = new User();
+        try {
+            BeanUtils.populate(userTmp, request.getParameterMap());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(userTmp.toString());
+        for (User user : list) {
+            if (user.getId().equals(id)) {
+                user.setName(name);
+                user.setAge(age);
+                user.setAddress(address);
+            }
+        }
+        response.sendRedirect("/home");
     }
 }
