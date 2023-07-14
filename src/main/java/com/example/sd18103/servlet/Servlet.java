@@ -84,16 +84,24 @@ public class Servlet extends HttpServlet {
             }
             response.sendRedirect("/home");
         } else if (uri.contains("/add")) {
-            User userTmp = new User();
-            try {
-                BeanUtils.populate(userTmp, request.getParameterMap());
-                list.add(userTmp);
-                response.sendRedirect("/home");
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
+//            Cach 2: dung bean
+//            User userTmp = new User();
+//            try {
+//                BeanUtils.populate(userTmp, request.getParameterMap());
+//                list.add(userTmp);
+//                response.sendRedirect("/home");
+//            } catch (IllegalAccessException e) {
+//                throw new RuntimeException(e);
+//            } catch (InvocationTargetException e) {
+//                throw new RuntimeException(e);
+//            }
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            Integer age = Integer.parseInt(request.getParameter("age"));
+            String address = request.getParameter("address");
+            User user = new User(id, name, age, address);
+            list.add(user);
+            response.sendRedirect("/home");
 
         }
     }
