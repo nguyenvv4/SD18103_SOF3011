@@ -14,6 +14,8 @@ import java.util.ArrayList;
         "/home", // GET
         "/detail", //GET
         "/update", // POST
+        "/delete", //POST
+        "/add", // POST
 })
 public class Servlet extends HttpServlet {
     ArrayList<User> list = new ArrayList<>();
@@ -40,34 +42,59 @@ public class Servlet extends HttpServlet {
             }
             request.setAttribute("userDetail", userDetail);
             request.getRequestDispatcher("detail.jsp").forward(request, response);
+        } else if (uri.contains("/delete")) {
+            String id = request.getParameter("id");
+            User userDetail = new User();
+            for (User user : list) {
+                if (user.getId().equals(id)) {
+                    userDetail = user;
+                }
+            }
+            list.remove(userDetail);
+            response.sendRedirect("/home");
         }
 
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // cách 1.
-        String id = request.getParameter("id");
-        String name = request.getParameter("name");
-        Integer age = Integer.parseInt(request.getParameter("age"));
-        String address = request.getParameter("address");
-        // cách 2 dùng bean
-        User userTmp = new User();
-        try {
-            BeanUtils.populate(userTmp, request.getParameterMap());
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(userTmp.toString());
-        for (User user : list) {
-            if (user.getId().equals(id)) {
-                user.setName(name);
-                user.setAge(age);
-                user.setAddress(address);
+        String uri = request.getRequestURI();
+        if (uri.contains("/update")) {
+            // cách 1.
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            Integer age = Integer.parseInt(request.getParameter("age"));
+            String address = request.getParameter("address");
+            // cách 2 dùng bean
+            User userTmp = new User();
+            try {
+                BeanUtils.populate(userTmp, request.getParameterMap());
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
             }
+            System.out.println(userTmp.toString());
+            for (User user : list) {
+                if (user.getId().equals(id)) {
+                    user.setName(name);
+                    user.setAge(age);
+                    user.setAddress(address);
+                }
+            }
+            response.sendRedirect("/home");
+        } else if (uri.contains("/add")) {
+            User userTmp = new User();
+            try {
+                BeanUtils.populate(userTmp, request.getParameterMap());
+                list.add(userTmp);
+                response.sendRedirect("/home");
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+
         }
-        response.sendRedirect("/home");
     }
 }

@@ -15,15 +15,15 @@
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <body class="container">
-<form action="#">
+<form action="/add" method="post">
     <label class="form-label">ID</label>
-    <input type="text" class="form-control">
+    <input type="text" class="form-control" name="id">
     <label class="form-label">Name</label>
-    <input type="text" class="form-control">
+    <input type="text" class="form-control" name="name">
     <label class="form-label">Age</label>
-    <input type="text" class="form-control">
+    <input type="text" class="form-control" name="age">
     <label class="form-label">Address</label>
-    <input type="text" class="form-control">
+    <input type="text" class="form-control" name="address">
     <button type="submit"class="btn btn-primary">Submit</button>
 </form>
 <table class="table">
@@ -43,7 +43,7 @@
             <td>${u.age}</td>
             <td>${u.address}</td>
             <td>
-                <a href="#" class="btn btn-primary">Xoa</a>
+                <a href="/delete?id=${u.id}" class="btn btn-primary">Xoa</a>
                 <a href="/detail?id=${u.id}" class="btn btn-primary">Detail</a>
             </td>
         </tr>
