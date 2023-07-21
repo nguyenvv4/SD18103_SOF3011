@@ -5,28 +5,53 @@ import com.example.sd18103.repository.SanPhamRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-@WebServlet(name = "SanPhamServlet", value = "/san-pham")
+@WebServlet(name = "SanPhamServlet", value = {
+        "/san-pham",
+        "/detailSp",
+        "/save",
+})
 public class SanPhamServlet extends HttpServlet {
 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI();
-        if (uri.equals("/san-pham")) {
-            SanPhamRepository sanPhamRepository = new SanPhamRepository();
+        SanPhamRepository sanPhamRepository = new SanPhamRepository();
+
+        if (uri.contains("/san-pham")) {
             ArrayList<SanPham> list = sanPhamRepository.getAll();
             request.setAttribute("list", list);
             request.getRequestDispatcher("san-pham.jsp").forward(request, response);
+        } else if (uri.contains("/detailSp")) {
+            String id = request.getParameter("id");
+            SanPham sanPham = sanPhamRepository.getById(Integer.parseInt(id));
+            request.setAttribute("sanPham", sanPham);
+            request.getRequestDispatcher("detailSp.jsp").forward(request, response);
         }
 
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String uri = request.getRequestURI();
+        if (uri.contains("/save")) {
+            SanPham sp = new SanPham();
+            try {
+                BeanUtils.populate(sp, request.getParameterMap());
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+            SanPhamRepository sanPhamRepository = new SanPhamRepository();
+            sanPhamRepository.save(sp);
+            response.sendRedirect("/san-pham");
+        }
     }
 }

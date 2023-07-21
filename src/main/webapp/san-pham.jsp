@@ -15,6 +15,17 @@
 
 </head>
 <body class="container">
+<form action="/save" method="post">
+    <label class="form-label">Id</label>
+    <input type="text" class="form-control" value="${sanPham.id}" type="hidden" name="id">
+    <label class="form-label">Ma</label>
+    <input type="text" class="form-control" value="${sanPham.ma}" name="ma">
+    <label class="form-label">Ten</label>
+    <input type="text" class="form-control" value="${sanPham.ten}" name="ten">
+    <label class="form-label">Gia Ban</label>
+    <input type="text" class="form-control" value="${sanPham.giaBan}" name="giaBan">
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 <table class="table">
     <thead>
@@ -34,7 +45,7 @@
             <td>${u.giaBan}</td>
             <td>
                 <a href="/delete?id=${u.id}" class="btn btn-primary">Xoa</a>
-                <a href="/detail?id=${u.id}" class="btn btn-primary">Detail</a>
+                <a href="/detailSp?id=${u.id}" class="btn btn-primary">Detail</a>
             </td>
         </tr>
     </c:forEach>
