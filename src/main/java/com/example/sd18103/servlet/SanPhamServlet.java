@@ -15,6 +15,7 @@ import java.util.ArrayList;
         "/san-pham",
         "/detailSp",
         "/save",
+        "/updateSp",
 })
 public class SanPhamServlet extends HttpServlet {
 
@@ -40,6 +41,7 @@ public class SanPhamServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI();
+        SanPhamRepository sanPhamRepository = new SanPhamRepository();
         if (uri.contains("/save")) {
             SanPham sp = new SanPham();
             try {
@@ -49,9 +51,27 @@ public class SanPhamServlet extends HttpServlet {
             } catch (InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
-            SanPhamRepository sanPhamRepository = new SanPhamRepository();
             sanPhamRepository.save(sp);
             response.sendRedirect("/san-pham");
+        } else if (uri.contains("/updateSp")) {
+            String id = request.getParameter("id");
+            SanPham spOld = sanPhamRepository.getById(Integer.parseInt(id));
+            if (spOld != null) {
+                // tien hanh update
+                SanPham sp = new SanPham();
+
+                try {
+                    BeanUtils.populate(sp, request.getParameterMap());
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+                sanPhamRepository.update(sp);
+                response.sendRedirect("/san-pham");
+            } else {
+                System.out.println("Khong tim thay");
+            }
         }
     }
 }
