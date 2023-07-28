@@ -75,3 +75,12 @@ public class SanPhamServlet extends HttpServlet {
         }
     }
 }
+
+
+/*
+có 2 tài khoản đăng nhaapj với 2 quyền khác nhau: user/admin
+- login -> lấy được thông tin user name + password -> truy vấn vaào DB lấy ra thông tin của tài khoản bao gồm username, pass, role
+-> gắn thông tin vừa lấy đưược vào phần session
+-> mỗi lần truy cập -> check thông tin trong session xem user có quyền hay không
+
+ */
