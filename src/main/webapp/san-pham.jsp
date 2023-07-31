@@ -46,6 +46,7 @@
             <td>
                 <a href="/delete?id=${u.id}" class="btn btn-primary">Xoa</a>
                 <a href="/detailSp?id=${u.id}" class="btn btn-primary">Detail</a>
+                <a href="/addToCart?id=${u.id}" class="btn btn-primary">Thêm giỏ hàng</a>
             </td>
         </tr>
     </c:forEach>
